@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grit — Tasks</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" aria-label="Navigation">
+        <div class="sidebar__brand">Grit Task Manager</div>
+        <nav class="sidebar__nav">
+          <ul class="nav-list" id="sidebar-nav">
+            <li>
+              <button type="button" class="nav-item is-active" data-view="inbox">
+                <span class="nav-item__icon" aria-hidden="true">◆</span>
+                Inbox
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-view="today">
+                <span class="nav-item__icon" aria-hidden="true">◎</span>
+                Today
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-view="done">
+                <span class="nav-item__icon" aria-hidden="true">✓</span>
+                Done
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="page-header">
+          <div class="page-header__icon" id="page-icon" title="Page icon">📋</div>
+          <h1 class="page-title">
+            <input
+              type="text"
+              class="page-title__input"
+              id="page-title"
+              value="Tasks"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Page title"
+            />
+          </h1>
+        </header>
+
+        <section class="task-board" aria-label="Tasks">
+          <p
+            id="save-status"
+            class="task-board__save-status"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></p>
+          <ul class="task-list" id="task-list"></ul>
+
+          <div class="add-row">
+            <button type="button" class="add-row__btn" id="add-task-btn">
+              <span class="add-row__plus" aria-hidden="true">+</span>
+              Add a task
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/app.js" type="module"></script>
+  </body>
+</html>
