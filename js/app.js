@@ -43,14 +43,41 @@ function rowCreatedOnCalendarToday(row) {
 function applyViewFilter() {
   const list = document.getElementById("task-list") ?? dom.taskList;
   if (!list) return;
-  for (const row of list.querySelectorAll(".task-row")) {
+  const rows = list.querySelectorAll(".task-row");
+  let visibleCount = 0;
+
+  for (const row of rows) {
     const completed = row.querySelector(".task-row__checkbox")?.checked ?? false;
     let show = true;
-    /* Inbox = everything (open + done). Today / Done narrow the list. */
-    if (activeView === "inbox") show = true;
+    if (activeView === "inbox") show = !completed;
     else if (activeView === "done") show = completed;
     else if (activeView === "today") show = rowCreatedOnCalendarToday(row);
-    row.hidden = !show;
+
+    row.classList.toggle("task-row--filtered-out", !show);
+    if (show) visibleCount += 1;
+  }
+
+  updateFilterEmptyState(visibleCount, rows.length);
+}
+
+function updateFilterEmptyState(visibleCount, totalRows) {
+  const el = document.getElementById("filter-empty");
+  if (!el) return;
+  if (totalRows === 0) {
+    el.hidden = true;
+    return;
+  }
+  if (visibleCount === 0) {
+    const copy =
+      activeView === "inbox"
+        ? "No open tasks in Inbox. Completed tasks are in Done."
+        : activeView === "done"
+          ? "No completed tasks yet. Check off a task or switch to Inbox."
+          : "Nothing for Today. Tasks show here when their date matches today.";
+    el.textContent = copy;
+    el.hidden = false;
+  } else {
+    el.hidden = true;
   }
 }
 
@@ -187,7 +214,10 @@ async function maybeSeedFromTaskJson() {
 export function setActiveView(viewId) {
   activeView = viewId;
   dom.sidebarNav?.querySelectorAll(".nav-item").forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.view === viewId);
+    const on = btn.dataset.view === viewId;
+    btn.classList.toggle("is-active", on);
+    if (on) btn.setAttribute("aria-current", "page");
+    else btn.removeAttribute("aria-current");
   });
   applyViewFilter();
 }
@@ -295,6 +325,8 @@ window.addEventListener("beforeunload", flushPersist);
 async function init() {
   await maybeSeedFromTaskJson();
   renderFromStorage();
+  /* Ensure first paint matches default Inbox filter + empty hint. */
+  const defaultView =
+    dom.sidebarNav?.querySelector(".nav-item.is-active")?.dataset?.view || "inbox";
+  setActiveView(defaultView);
 }
-
-init();

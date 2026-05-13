@@ -219,6 +219,10 @@ ul {
   min-height: 32px;
 }
 
+.task-row.task-row--filtered-out {
+  display: none !important;
+}
+
 .task-row:hover {
   background: var(--bg-row-hover);
 }
@@ -333,6 +337,19 @@ ul {
 .task-row__btn-svg {
   display: block;
   pointer-events: none;
+}
+
+.task-board__filter-empty {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+  background: var(--bg-row-hover);
+  border-radius: var(--radius);
+}
+
+.task-board__filter-empty[hidden] {
+  display: none !important;
 }
 
 .task-board__save-status {
